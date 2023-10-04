@@ -1,0 +1,48 @@
+# Conexión Google Drive
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+#Google Sheets
+from google.colab import auth
+auth.authenticate_user()
+
+import gspread
+from google.auth import default
+creds, _ = default()
+
+gc = gspread.authorize(creds)
+
+!pip install kora
+from kora.xattr import get_id
+
+project = '/content/drive/MyDrive/nueva.gsheet'
+
+id_file_resumen = get_id(project)
+
+
+# Abre el archivo de Google Sheets
+project = '/content/drive/MyDrive/nueva.gsheet'
+
+# Obtén el ID del archivo
+from kora.xattr import get_id
+id_file_resumen = get_id(project)
+
+# Abre la hoja (worksheet) del archivo
+Sheet_Project = gc.open_by_key(id_file_resumen).sheet1
+
+# Obtiene todos los valores de la hoja y los carga en una lista de listas
+data = Sheet_Project.get_all_values()
+
+# Ahora 'data' contiene los datos del archivo de Google Sheets
+# Puedes trabajar con 'data' como una lista de listas en Python
+print(data)
+
+import pandas as pd
+
+# Convierte 'data' en un DataFrame
+df = pd.DataFrame(data[1:], columns=data[0])
+
+# Ahora 'df' es un DataFrame de pandas que contiene los datos del archivo de Google Sheets
+
+df
